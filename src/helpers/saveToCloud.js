@@ -2,21 +2,18 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import config from '../config/config.js';
+import { db } from '../providers/firebase';
 
-const saveToCloud = (info) => {
-  firebase.initializeApp(config.firebase);
-  firebase.firestore();
-  console.log("info", info);
-  let id = info.id;
-  delete info.id;
-  const db = firebase.firestore();
-  db.settings({
-    timestampsInSnapshots: true
-  });
-  const userRef = db.collection('fotos').add({
+const saveToCloud = info => {
+  const userRef = db.doc(info.asset_id).set({
     ...info
-  });
-  console.log(userRef);
+  })
+  .then(function() {
+    console.log("Document successfully written!");
+})
+.catch(function(error) {
+    console.error("Error writing document: ", error);
+});
 }
 
 

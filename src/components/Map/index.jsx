@@ -2,9 +2,10 @@ import React from "react";
 import L from "leaflet";
 import config from '../../config/config';
 import UIContext from '../../providers/uiContext';
-import uploadWidget from "../../helpers/uploadWidget";
+import uploadWidget from '../../helpers/uploadWidget';
 import saveToCloud from '../../helpers/saveToCloud';
-import Loader from "../Loader";
+import Loader from '../Loader';
+import { db } from '../../providers/firebase';
 
 //TODO: move to default config
 config.spinner = {
@@ -30,6 +31,24 @@ class Map extends React.Component {
         { lat: 59.2580, lng: 19.0212 }
       ]
     }
+    // var tutorialsRef = firebase.firestore().collection("/fotos");
+
+    db.get().then(function(snapshot) {
+    // vat tutorials = [];
+
+      snapshot.forEach(childSnapshot => {
+
+      let id = childSnapshot.id;
+      // var data = childSnapshot.val();
+      // ...
+        // console.log(childSnapshot.get());
+        db.doc(id).get().then((data) => {
+          console.log(data);
+        });
+
+      // tutorials.push({ id: id, title: data.title, description: data.description});
+    });
+});
   }
   showLoader() {
     this.setState({

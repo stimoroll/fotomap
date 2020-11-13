@@ -23,7 +23,8 @@ const config = {
     position: {
       lat: 50.2579,
       lng: 19.0210
-    }
+    },
+    firebaseCollection: 'fotos'
   }
 }
 
