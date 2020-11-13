@@ -31,29 +31,25 @@ class Map extends React.Component {
         { lat: 59.2580, lng: 19.0212 }
       ]
     }
-    // var tutorialsRef = firebase.firestore().collection("/fotos");
 
-    db.get().then(function(snapshot) {
-    // vat tutorials = [];
-
-      snapshot.forEach(childSnapshot => {
-
-      let id = childSnapshot.id;
-      // var data = childSnapshot.val();
-      // ...
-        // console.log(childSnapshot.get());
-        db.doc(id).get().then((data) => {
-          console.log(data);
-        });
-
-      // tutorials.push({ id: id, title: data.title, description: data.description});
+    db.get().then(snapshot => {
+      snapshot.forEach(doc => {
+        console.log(doc.id, '=>', doc.data());
+        this.state.markers.push(doc.data());
+      });
     });
-});
+
   }
   showLoader() {
     this.setState({
       ...this.state,
       loading: true
+    });
+  }
+
+  showMarkers() {
+    this.state.markers.map((position, idx) => {
+      this.marker = L.marker(position).addTo(this.map);
     });
   }
 
@@ -78,9 +74,7 @@ class Map extends React.Component {
       ]
     });
 
-    this.state.markers.map((position, idx) => {
-      this.marker = L.marker(position).addTo(this.map);
-    });
+    this.showMarkers();
 
     this.map.on('click', (e) => {
       this.showLoader()
