@@ -27,17 +27,19 @@ class Map extends React.Component {
     this.state = {
       center: config.defaults.position,
       markers: [
-        { lat: 59.2577, lng: 19.0211 },
+        { lat: 50.25798891933303, lng: 19.021024703979496 },
         { lat: 59.2580, lng: 19.0212 }
       ]
     }
 
-    db.get().then(snapshot => {
-      snapshot.forEach(doc => {
-        console.log(doc.id, '=>', doc.data());
-        this.state.markers.push(doc.data());
+    db.get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          console.log(doc.id, '=>', doc.data());
+          //TODO: change to setState if required
+          this.state.markers.push(doc.data());
+        });
       });
-    });
 
   }
   showLoader() {
@@ -48,8 +50,11 @@ class Map extends React.Component {
   }
 
   showMarkers() {
-    this.state.markers.map((position, idx) => {
-      this.marker = L.marker(position).addTo(this.map);
+    this.state.markers.map((data, idx) => {
+      const { lat, lng } = data;
+      console.log(data);
+      console.log(lat, lng);
+      this.marker = L.marker({ lat, lng }).addTo(this.map);
     });
   }
 
