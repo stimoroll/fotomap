@@ -1,0 +1,32 @@
+{
+  "name": "fotomap",
+  "version": "0.0.1",
+  "description": null,
+  "keywords": [
+    "map",
+    "leaflet",
+    "react"
+  ],
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "leaflet": "latest",
+    "react": "17.0.0",
+    "react-dom": "17.0.0",
+    "react-loading": "^2.0.3",
+    "react-redux": "^7.2.2",
+    "react-redux-firebase": "^3.7.0",
+    "redux": "^4.0.5",
+    "superagent": "^6.1.0"
+  },
+  "devDependencies": {
+    "firebase": "^8.0.1",
+    "react-scripts": "1.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
