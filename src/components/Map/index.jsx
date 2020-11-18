@@ -1,4 +1,5 @@
 import React from "react";
+import './Map.css';
 import L from "leaflet";
 import config from '../../config/config';
 import UIContext from '../../providers/uiContext';
@@ -58,14 +59,22 @@ class Map extends React.Component {
   showMarkers() {
     this.state.markers.map((data, idx) => {
       console.log(data);
-      let { lat, lng } = data;
-      console.log("LATLNG",data.lat, data.lng);
-      this.marker = L.marker({ lat, lng }).addTo(this.fotosMap);
-      // var littleton = L.marker([39.61, -105.02]).bindPopup('This is Littleton, CO.'),
-      // var cities = L.layerGroup([littleton, denver, aurora, golden]);
+      let { lat, lng, thumbnail_url } = data;
+      console.log("LATLNG", data.lat, data.lng);
+      let greenIcon = L.icon({
+        iconUrl: thumbnail_url,
+        // shadowUrl: 'leaf-shadow.png',
+
+        iconSize:     [40, 40], // size of the icon
+        // shadowSize:   [50, 64], // size of the shadow
+        iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+        // shadowAnchor: [4, 62],  // the same for the shadow
+        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
     });
-    let fotos = L.layerGroup(this.maker);
-    // L.control.layers(fotos).addTo(this.map);
+
+      this.marker = L.marker([ lat, lng ], {icon: greenIcon}).addTo(this.fotosMap).bindPopup("I am a green leaf.");
+    });
+    // this.map.fitBounds(this.fotosMap.getBounds());
   }
 
   makeHideLoader() {
