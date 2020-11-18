@@ -27,19 +27,25 @@ class Map extends React.Component {
     this.state = {
       center: config.defaults.position,
       markers: [
-        { lat: 50.25798891933303, lng: 19.021024703979496 },
-        { lat: 59.2580, lng: 19.0212 }
+        // { lat: 50.25798891933303, lng: 19.021024703979496 },
+        // { lat: 59.2580, lng: 19.0212 }
       ]
     }
 
     db.get()
       .then(snapshot => {
+        let tempmark = [];
         snapshot.forEach(doc => {
-          console.log(doc.id, '=>', doc.data());
-          //TODO: change to setState if required
-          this.state.markers.push(doc.data());
+          // console.log(doc.data());
+          // this.setState([...this.state.markers, doc.data()]);
+          // this.state.markers.push(doc.data());
+          tempmark.push(doc.data());
         });
-      });
+        console.log(tempmark);
+        this.setState({...this.state, markers: tempmark });
+      })
+    
+    // .then()
 
   }
   showLoader() {
@@ -51,11 +57,15 @@ class Map extends React.Component {
 
   showMarkers() {
     this.state.markers.map((data, idx) => {
-      const { lat, lng } = data;
       console.log(data);
-      console.log(lat, lng);
-      this.marker = L.marker({ lat, lng }).addTo(this.map);
+      let { lat, lng } = data;
+      console.log("LATLNG",data.lat, data.lng);
+      this.marker = L.marker({ lat, lng }).addTo(this.fotosMap);
+      // var littleton = L.marker([39.61, -105.02]).bindPopup('This is Littleton, CO.'),
+      // var cities = L.layerGroup([littleton, denver, aurora, golden]);
     });
+    let fotos = L.layerGroup(this.maker);
+    // L.control.layers(fotos).addTo(this.map);
   }
 
   makeHideLoader() {
@@ -68,18 +78,17 @@ class Map extends React.Component {
   }
 
   componentDidMount() {
+    this.fotosMap = L.layerGroup(this.maker);
+    const baseMap = L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        })
     this.map = L.map("map", {
       center: this.state.center,
       zoom: 16,
-      layers: [
-        L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
-          attribution:
-            '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        })
-      ]
+      layers: [baseMap, this.fotosMap ]
     });
 
-    this.showMarkers();
+    // this.showMarkers();
 
     this.map.on('click', (e) => {
       this.showLoader()
@@ -92,8 +101,12 @@ class Map extends React.Component {
     });
 
   }
-  componentDidUpdate({markers}) {
-
+  componentDidUpdate(prevState) {
+    if (prevState !== this.state) {
+      //probably the last was the one updated
+      console.log('UPDATE')
+      this.showMarkers();
+    }
   }
 
   addMarker = (LatLng) => {
