@@ -71,32 +71,30 @@ class Map extends React.Component {
   showMarkers() {
     this.state.markers.map((data, idx) => {
       console.log(data);
-      let { lat, lng, thumbnail_url, secure_url } = data;
+      let { lat, lng, thumbnail_url, secure_url, width, height } = data;
       console.log("LATLNG", data.lat, data.lng);
       let greenIcon = L.icon({
         iconUrl: thumbnail_url,
-        // shadowUrl: 'leaf-shadow.png',
-
         iconSize: [40, 40], // size of the icon
-        // shadowSize:   [50, 64], // size of the shadow
         iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-        // shadowAnchor: [4, 62],  // the same for the shadow
         popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
       });
 
-      // this.marker
+      let popup = L.popup()
+          .setContent('<div style="width: 300px; height: 10vh; min-height: 150px; background: url(' + secure_url + ')" ></div>')
+
       let marker = L.marker([lat, lng], { icon: greenIcon })
         .addTo(this.fotosMap)
-        .bindPopup(
-          "I am a green leaf.<p>Test</p>"
-        )
-      // .bindTooltip({ content: 'test' })
-      // this.marker
+        .bindPopup(popup)
+
       marker.on('mouseover', function (ev) {
         marker.openPopup();
       });
       marker.on('mouseout', function (ev) {
         marker.closePopup();
+      });
+      marker.on('click', function (e) {
+        //TODO: add redirect to full image with description
       });
     });
     // this.map.fitBounds(this.fotosMap.getBounds());
@@ -122,8 +120,6 @@ class Map extends React.Component {
       layers: [baseMap, this.fotosMap ]
     });
 
-    // this.showMarkers();
-
     this.map.on('click', (e) => {
       this.showLoader()
       const hideLoader = this.makeHideLoader();
@@ -137,8 +133,7 @@ class Map extends React.Component {
   }
   componentDidUpdate(prevState) {
     if (prevState !== this.state) {
-      //probably the last was the one updated
-      console.log('UPDATE')
+      //TODO: compare and update only diffrent 
       this.showMarkers();
     }
   }
