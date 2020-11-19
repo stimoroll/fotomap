@@ -56,23 +56,48 @@ class Map extends React.Component {
     });
   }
 
+		// var marker = L.marker(photo, {
+		// 	icon: L.divIcon(L.extend({
+		// 		html: '<div style="background-image: url(' + photo.thumbnail + ');"></div>​',
+		// 		className: 'leaflet-marker-photo'
+		// 	}, photo, this.options.icon)),
+		// 	title: photo.caption || ''
+    // });
+    
+  
+  // var myIcon = L.divIcon({className: 'my-div-icon'});
+// you can set .my-div-icon styles in CSS
+
   showMarkers() {
     this.state.markers.map((data, idx) => {
       console.log(data);
-      let { lat, lng, thumbnail_url } = data;
+      let { lat, lng, thumbnail_url, secure_url } = data;
       console.log("LATLNG", data.lat, data.lng);
       let greenIcon = L.icon({
         iconUrl: thumbnail_url,
         // shadowUrl: 'leaf-shadow.png',
 
-        iconSize:     [40, 40], // size of the icon
+        iconSize: [40, 40], // size of the icon
         // shadowSize:   [50, 64], // size of the shadow
-        iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+        iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
         // shadowAnchor: [4, 62],  // the same for the shadow
-        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-    });
+        popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+      });
 
-      this.marker = L.marker([ lat, lng ], {icon: greenIcon}).addTo(this.fotosMap).bindPopup("I am a green leaf.");
+      // this.marker
+      let marker = L.marker([lat, lng], { icon: greenIcon })
+        .addTo(this.fotosMap)
+        .bindPopup(
+          "I am a green leaf.<p>Test</p>"
+        )
+      // .bindTooltip({ content: 'test' })
+      // this.marker
+      marker.on('mouseover', function (ev) {
+        marker.openPopup();
+      });
+      marker.on('mouseout', function (ev) {
+        marker.closePopup();
+      });
     });
     // this.map.fitBounds(this.fotosMap.getBounds());
   }
